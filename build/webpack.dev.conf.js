@@ -11,11 +11,11 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 /* mock数据 start */
-// const express = require('express')
-// const app = express()
-// var appData = require('../mock/goods.json')//加载本地数据文件
-// var apiRoutes = express.Router()
-// app.use('/api', apiRoutes)
+const express = require('express')
+let axios = require('axios')
+const app = express()
+let apiRoutes = express.Router()
+app.use('/api', apiRoutes)
 /* mock数据 end */
 
 const HOST = process.env.HOST
@@ -31,14 +31,22 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   // these devServer options should be customized in /config/index.js
   devServer: {
     // 调用mock数据 start
-    // before(app){
-    //   app.get('/api/appData',(req,res)=>{
-    //     res.json({
-    //       errno: 0,
-    //       data:appData
-    //     })
-    //   })
-    // },
+    before(app){
+      app.get('/api/getDiscList',(req,res)=>{
+        let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+    },
     // 调用mock数据 end
     clientLogLevel: 'warning',
     historyApiFallback: {
