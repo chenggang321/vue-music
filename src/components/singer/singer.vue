@@ -79,7 +79,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" rel="stylesheet">
+<style lang="stylus" type="text/stylus">
 .singer
   position: fixed
   top: 88px

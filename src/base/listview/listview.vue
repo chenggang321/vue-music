@@ -38,12 +38,12 @@
 
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll'
-import { getData } from 'common/js/dom'
+import {getData} from 'common/js/dom'
 
 const ANCHOR_HEIGHT = 18
 
 export default {
-  created () {
+  created() {
     this.touch = {}
     this.listenScroll = true
   },
@@ -60,21 +60,21 @@ export default {
     }
   },
   computed: {
-    shortcutList () {
+    shortcutList() {
       return this.data.map(group => {
         return group.title.substr(0, 1)
       })
     }
   },
   methods: {
-    onShortcutTouchStart (e) {
+    onShortcutTouchStart(e) {
       let anchorIndex = getData(e.target, 'index')
       let firstTouch = e.touches[0]
       this.touch.y1 = firstTouch.pageY
       this.touch.anchorIndex = anchorIndex
       this._scrollTo(anchorIndex)
     },
-    onShortcutTouchMove (e) {
+    onShortcutTouchMove(e) {
       let firstTouch = e.touches[0]
       this.touch.y2 = firstTouch.pageY
       let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
@@ -84,7 +84,7 @@ export default {
     scroll(pos) {
       this.scrollY = pos.y
     },
-    _scrollTo (index) {
+    _scrollTo(index) {
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
     }
   },
@@ -94,7 +94,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" rel="stylesheet">
+<style lang="stylus" type="text/stylus">
 @import "~common/stylus/variable"
 
 .listview
