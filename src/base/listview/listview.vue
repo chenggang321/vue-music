@@ -3,8 +3,8 @@
     class="listview"
     :data="data"
     ref="listview"
-    :listenScroll="listenScroll"
-    :propType="propType"
+    :listen-scroll="listenScroll"
+    :probe-type="probeType"
     @scroll="scroll"
   >
     <ul>
@@ -62,7 +62,7 @@ export default {
   created () {
     this.touch = {}
     this.listenScroll = true
-    this.propType = 3
+    this.probeType = 3
   },
   data () {
     return {
