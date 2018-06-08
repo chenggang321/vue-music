@@ -21,7 +21,6 @@ export default class Song {
       getLyric(this.mid).then((res) => {
         if (res.retcode === ERR_OK) {
           this.lyric = Base64.decode(res.lyric)
-          console.log(this.lyric)
           resolve(this.lyric)
         } else {
           reject(new Error('no lyric'))
@@ -39,7 +38,7 @@ export function createSong (musicData) {
     album: musicData.albumname,
     duration: musicData.interval,
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-    url: `http://dl.stream.qqmusic.qq.com/C400000QCwge3B6Ad1.m4a?vkey=0BD6D52607ABE7157213B57CE96354D7CC6DF4B68878BCE434CFAFE2890C6C491E34FFF7367D765D22321B70AAED280F3D641F372D91E870&guid=351000701&uin=1129137164&fromtag=66`
+    url: `http://dl.stream.qqmusic.qq.com/C400000QCwge3B6Ad1.m4a?vkey=3359D3FA2ACA74EF21BD031400B74E290A17CADE372185619E8912822B27FBAD8F666126F4D04B5310F24B6B52E1E877FF913A119976000D&guid=351000701&uin=1129137164&fromtag=66`
     // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
     // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}/${musicData.songid}.m4a?guid=263427534&fromtag=66`
     // url: `http://thirdparty.gtimg.com/C100${musicData.songmid}.m4a?fromtag=38`

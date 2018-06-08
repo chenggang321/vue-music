@@ -46,7 +46,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       })
-      app.get('/lyric', function (req, res) {
+      app.get('/api/lyric', function (req, res) {
         var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
 
         axios.get(url, {
