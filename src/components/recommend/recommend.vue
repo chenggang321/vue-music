@@ -1,7 +1,7 @@
 <template>
-  <scroll ref="scroll" :data="discList" class="recommend">
-    <div>
-      <div class="recommend-content">
+  <div class="recommend">
+    <scroll ref="scroll" :data="discList" class="recommend-content">
+      <div>
         <div v-if="recommends.length" class="slider-wrapper">
           <slider>
             <div v-for="item in recommends" :key="item.id">
@@ -14,7 +14,11 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="item in discList" :key="item.id" class="item">
+            <li v-for="item in discList"
+                :key="item.id"
+                class="item"
+                @click="selectItem(item)"
+            >
               <div class="icon">
                 <img width="60" height="60" v-lazy="item.imgurl">
               </div>
@@ -29,8 +33,10 @@
       <div class="loading-container" v-show="!discList.length">
         <loading></loading>
       </div>
-    </div>
-  </scroll>
+    </scroll>
+    <router-view></router-view>
+  </div>
+
 </template>
 
 <script type="text/ecmascript-6">
@@ -39,6 +45,7 @@ import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
 import { getRecommend, getDiscList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
+import { mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -54,6 +61,13 @@ export default {
     }, 1000)
   },
   methods: {
+    selectItem (item) {
+      console.log(item.dissid)
+      this.$router.push({
+        path: `/recommend/${item.dissid}`
+      })
+      this.setDisc(item)
+    },
     _getRecommend () {
       getRecommend().then((res) => {
         if (res.code === ERR_OK) {
@@ -73,7 +87,10 @@ export default {
         this.$refs.scroll.refresh()
         this.checkLoaded = true
       }
-    }
+    },
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    })
   },
   components: {
     Slider,
