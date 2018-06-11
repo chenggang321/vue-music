@@ -44,7 +44,7 @@ export function createSong (musicData) {
     // url: `http://thirdparty.gtimg.com/C100${musicData.songmid}.m4a?fromtag=38`
   })
 }
-function filterSinger (singer) {
+export function filterSinger (singer) {
   let ret = []
   if (!singer) {
     return ''

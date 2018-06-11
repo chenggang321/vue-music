@@ -7,6 +7,9 @@
         :key="song.id"
         class="item"
       >
+        <div class="rank" v-show="rank">
+          <span :class="getRankCls(index)">{{getRankText(index)}}</span>
+        </div>
         <div class="content">
           <h2 class="name">{{song.name}}</h2>
           <p class="desc" v-text="getDesc(song)"></p>
@@ -22,6 +25,10 @@ export default {
     songs: {
       type: Array,
       default: null
+    },
+    rank: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -30,12 +37,24 @@ export default {
     },
     getDesc (song) {
       return `${song.singer} - ${song.album}`
+    },
+    getRankCls (index) {
+      if (index <= 2) {
+        return `icon icon${index}`
+      } else {
+        return 'text'
+      }
+    },
+    getRankText (index) {
+      if (index > 2) {
+        return index + 1
+      }
     }
   }
 }
 </script>
 
-<style lang="stylus" type="text/stylus">
+<style scoped lang="stylus" type="text/stylus">
 @import "~common/stylus/variable"
 @import "~common/stylus/mixin"
 
