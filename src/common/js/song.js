@@ -13,6 +13,7 @@ export default class Song {
     this.image = image
     this.url = url
   }
+
   getLyric () {
     if (this.lyric) {
       return Promise.resolve(this.lyric)
@@ -29,6 +30,7 @@ export default class Song {
     })
   }
 }
+
 export function createSong (musicData) {
   return new Song({
     id: musicData.songid,
@@ -38,13 +40,14 @@ export function createSong (musicData) {
     album: musicData.albumname,
     duration: musicData.interval,
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-    url: `http://dl.stream.qqmusic.qq.com/C400000QCwge3B6Ad1.m4a?vkey=FB5097EFF3EDBF5414E8F9653AE5CBD0B5040EBF195FE6F745CE73F821A911D7FD3FDEC6D3AE0CFC4E6410A09876F79D67BDF8DEB0919114&guid=351000701&uin=1129137164&fromtag=66`
+    url: `http://ws.stream.qqmusic.qq.com/C100${musicData.songmid}.m4a?fromtag=0&guid=126548448`
     // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
     // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}/${musicData.songid}.m4a?guid=263427534&fromtag=66`
     // url: `http://thirdparty.gtimg.com/C100${musicData.songmid}.m4a?fromtag=38`
   })
 }
-export function filterSinger (singer) {
+
+function filterSinger (singer) {
   let ret = []
   if (!singer) {
     return ''

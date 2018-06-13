@@ -1,10 +1,10 @@
 <template>
   <div class="search">
     <div class="search-box-wrapper">
-      <search-box ref="searchBox" @query="onQueryChange(query)"></search-box>
+      <search-box ref="searchBox" @query="onQueryChange"></search-box>
     </div>
-    <div class="shortcut-wrapper">
-      <div class="shortcut">
+    <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
+      <scroll class="shortcut" ref="shortcut">
         <div class="hot-key">
           <h1 class="title">热门搜索</h1>
           <ul>
@@ -13,11 +13,21 @@
             </li>
           </ul>
         </div>
-      </div>
+        <div class="search-history" v-show="searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="clear">
+              <i class="icon-clear"></i>
+            </span>
+          </h1>
+          <search-list :searches="searchHistory"></search-list>
+        </div>
+      </scroll>
     </div>
-    <div class="search-result">
-      <suggest :query="query"></suggest>
+    <div ref="searchResult" class="search-result" v-show="query">
+      <suggest ref="suggest" :query="query" @listScroll="blurInput" @select="saveSearch"></suggest>
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -26,8 +36,13 @@ import SearchBox from 'base/search-box/search-box'
 import { getHotKey } from 'api/serach'
 import { ERR_OK } from 'api/config'
 import Suggest from 'components/suggest/suggest'
+import { mapActions, mapGetters } from 'vuex'
+import SearchList from 'base/search-list/search-list'
+import { playlistMixin } from 'common/js/mixin'
+import Scroll from 'base/scroll/scroll'
 
 export default {
+  mixins: [playlistMixin],
   created () {
     this._getHotKey()
   },
@@ -37,13 +52,30 @@ export default {
       query: ''
     }
   },
+  computed: {
+    ...mapGetters([
+      'searchHistory'
+    ])
+  },
   methods: {
+    handlePlaylist (playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.shortcutWrapper.style.bottom = bottom
+      this.$refs.shortcut.refresh()
+      this.$refs.searchResult.style.bottom = bottom
+      this.$refs.suggest.refresh()
+    },
     addQuery (query) {
-      console.log(query)
       this.$refs.searchBox.setQuery(query)
     },
     onQueryChange (query) {
       this.query = query
+    },
+    blurInput () {
+      this.$refs.searchBox.blur()
+    },
+    saveSearch () {
+      this.saveSearchHistory(this.query)
     },
     _getHotKey () {
       getHotKey().then((res) => {
@@ -51,11 +83,16 @@ export default {
           this.hotKey = res.data.hotkey.slice(0, 10)
         }
       })
-    }
+    },
+    ...mapActions([
+      'saveSearchHistory'
+    ])
   },
   components: {
     SearchBox,
-    Suggest
+    Suggest,
+    SearchList,
+    Scroll
   }
 }
 </script>
