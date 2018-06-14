@@ -30,6 +30,12 @@ const matutions = {
   },
   [types.SET_SEARCH_HISTORY] (state, history) {
     state.searchHistory = history
+  },
+  [types.SET_PLAY_HISTORY] (state, playHistory) {
+    state.playHistory = playHistory
+  },
+  [types.SET_FAVORITE_LIST] (state, favoriteList) {
+    state.favoriteList = favoriteList
   }
 }
 

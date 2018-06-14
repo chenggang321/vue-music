@@ -1,11 +1,10 @@
 <template>
   <div class="song-list">
     <ul>
-      <li
-        @click="selectItem(song,index)"
-        v-for="(song,index) in songs"
-        :key="song.id"
-        class="item"
+      <li @click="selectItem(song,index)"
+          v-for="(song,index) in songs"
+          :key="index"
+          class="item"
       >
         <div class="rank" v-show="rank">
           <span :class="getRankCls(index)">{{getRankText(index)}}</span>
@@ -24,7 +23,9 @@ export default {
   props: {
     songs: {
       type: Array,
-      default: null
+      default: () => {
+        return []
+      }
     },
     rank: {
       type: Boolean,
