@@ -9,4 +9,4 @@ RUN npm install
 #对外暴露的端口
 EXPOSE 8085
 #程序启动脚本
-CMD ["npm", "prod"]
+CMD ["npm","run", "prod"]
