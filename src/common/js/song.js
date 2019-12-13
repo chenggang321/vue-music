@@ -1,4 +1,5 @@
 import { getLyric } from 'api/song'
+import { getSongUrl } from 'api/recommend'
 import { ERR_OK } from 'api/config'
 import { Base64 } from 'js-base64'
 
@@ -32,18 +33,18 @@ export default class Song {
 }
 
 export function createSong (musicData) {
+  if (!musicData.id) return false
+  console.log(musicData)
+  getSongUrl(musicData.id).then(res => {
+    console.log(res)
+  })
   return new Song({
-    id: musicData.songid,
-    mid: musicData.songmid,
-    singer: filterSinger(musicData.singer),
-    name: musicData.songname,
-    album: musicData.albumname,
+    id: musicData.id,
+    singer: filterSinger(musicData.ar),
+    name: musicData.name,
+    album: musicData.al.name,
     duration: musicData.interval,
-    image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-    url: `http://ws.stream.qqmusic.qq.com/C100${musicData.songmid}.m4a?fromtag=0&guid=126548448`
-    // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
-    // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}/${musicData.songid}.m4a?guid=263427534&fromtag=66`
-    // url: `http://thirdparty.gtimg.com/C100${musicData.songmid}.m4a?fromtag=38`
+    image: musicData.picUrl
   })
 }
 

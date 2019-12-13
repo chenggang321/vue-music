@@ -11,16 +11,15 @@
 import MusicList from 'components/music-list/music-list'
 import { mapGetters } from 'vuex'
 import { getSongList } from 'api/recommend'
-import { ERR_OK } from 'api/config'
 import { createSong } from 'common/js/song'
 
 export default {
   computed: {
     title () {
-      return this.disc.dissname
+      return this.disc.name
     },
     bgImage () {
-      return this.disc.imgurl
+      return this.disc.coverImgUrl
     },
     ...mapGetters([
       'disc'
@@ -36,19 +35,19 @@ export default {
   },
   methods: {
     _getSongList () {
-      if (!this.disc.dissid) {
+      if (!this.disc.id) {
         this.$router.push('/recommend')
       }
-      getSongList(this.disc.dissid).then((res) => {
-        if (res.code === ERR_OK) {
-          this.songs = this._normallizeSongs(res.cdlist[0].songlist)
+      getSongList(this.disc.id).then((res) => {
+        if (res.data.code === 200) {
+          this.songs = this._normallizeSongs(res.data.playlist.tracks)
         }
       })
     },
-    _normallizeSongs (list) {
+    _normallizeSongs (list = []) {
       let ret = []
       list.forEach((musicData) => {
-        if (musicData.songid && musicData.albumid) {
+        if (musicData.id && musicData.name) {
           ret.push(createSong(musicData))
         }
       })

@@ -5,8 +5,8 @@
         <div v-if="recommends.length" class="slider-wrapper">
           <slider>
             <div v-for="item in recommends" :key="item.id">
-              <a :href="item.linkUrl">
-                <img @load="loadImage" :src="item.picUrl">
+              <a>
+                <img @load="loadImage" :src="item.pic">
               </a>
             </div>
           </slider>
@@ -20,11 +20,11 @@
                 @click="selectItem(item)"
             >
               <div class="icon">
-                <img width="60" height="60" v-lazy="item.imgurl">
+                <img width="60" height="60" v-lazy="item.coverImgUrl">
               </div>
               <div class="text">
-                <h2 class="name" v-html="item.creator.name"></h2>
-                <p class="desc" v-html="item.dissname"></p>
+                <h2 class="name" v-html="item.name"></h2>
+                <p class="desc" v-html="item.tags.join(' / ')"></p>
               </div>
             </li>
           </ul>
@@ -44,7 +44,6 @@ import Loading from 'base/loading/loading'
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
 import { getRecommend, getDiscList } from 'api/recommend'
-import { ERR_OK } from 'api/config'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -62,23 +61,23 @@ export default {
   },
   methods: {
     selectItem (item) {
-      console.log(item.dissid)
       this.$router.push({
-        path: `/recommend/${item.dissid}`
+        path: `/recommend/${item.id}`
       })
       this.setDisc(item)
     },
     _getRecommend () {
       getRecommend().then((res) => {
-        if (res.code === ERR_OK) {
-          this.recommends = res.data.slider
+        if (res.data.code === 200) {
+          this.recommends = res.data.banners
         }
       })
     },
     _getDiscList () {
       getDiscList().then((res) => {
-        if (res.code === ERR_OK) {
-          this.discList = res.data.list
+        if (res.data.code === 200) {
+          console.log(res.data)
+          this.discList = res.data.playlists
         }
       })
     },
