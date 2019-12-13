@@ -1,6 +1,5 @@
 import { getLyric } from 'api/song'
 import { getSongUrl } from 'api/recommend'
-import { ERR_OK } from 'api/config'
 import { Base64 } from 'js-base64'
 
 export default class Song {
@@ -12,7 +11,6 @@ export default class Song {
     this.album = album
     this.duration = duration
     this.image = image
-    this.url = url
   }
 
   getLyric () {
@@ -20,8 +18,10 @@ export default class Song {
       return Promise.resolve(this.lyric)
     }
     return new Promise((resolve, reject) => {
-      getLyric(this.mid).then((res) => {
-        if (res.retcode === ERR_OK) {
+      getLyric(this.id).then((res) => {
+        console.log(res)
+        if (res.data.code === 200) {
+          console.log(res.data)
           this.lyric = Base64.decode(res.lyric)
           resolve(this.lyric)
         } else {
@@ -30,22 +30,36 @@ export default class Song {
       })
     })
   }
+
+  getSongUrl () {
+    if (this.url) {
+      return Promise.resolve(this.url)
+    }
+    return new Promise((resolve, reject) => {
+      getSongUrl(this.id).then((res) => {
+        if (res.data.code === 200) {
+          this.url = res.data.data[0].url
+          resolve(this.url)
+        } else {
+          reject(new Error('no song url'))
+        }
+      })
+    })
+  }
 }
 
 export function createSong (musicData) {
   if (!musicData.id) return false
-  console.log(musicData)
-  getSongUrl(musicData.id).then(res => {
-    console.log(res)
-  })
-  return new Song({
+  const song = new Song({
     id: musicData.id,
     singer: filterSinger(musicData.ar),
     name: musicData.name,
     album: musicData.al.name,
-    duration: musicData.interval,
-    image: musicData.picUrl
+    duration: 4 * 60,
+    image: musicData.al.picUrl
   })
+  song.getSongUrl()
+  return song
 }
 
 function filterSinger (singer) {
